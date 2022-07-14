@@ -16,3 +16,18 @@ export const newUser = async (req, res) => {
     });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const data = await UserService.login(req.body)
+    res.status(HttpStatus.OK).json({
+      data: data,
+      message: "Login Successfull"
+    })
+  } catch (error) {
+    res.status(HttpStatus.CONFLICT).json({
+      code: HttpStatus.CONFLICT,
+      message: `${error}`
+    });
+  }
+}
