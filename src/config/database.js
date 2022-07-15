@@ -12,6 +12,8 @@ const database = async () => {
     try {
         await client.connect();
         logger.info('Connected to the database.');
+        const userCollection = client.db("blogAppDB").collection("users");
+        module.exports = userCollection;
 
     } catch (error) {
         logger.error('Could not connect to the database.', error);
