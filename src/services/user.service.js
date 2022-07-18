@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.class";
 import jwt from "jsonwebtoken";
+const tokens = {}
 
 export const collection = () => {
   var collect = require('../config/database');
@@ -40,11 +41,15 @@ export const login = async (body) => {
   else {
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-      let token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY);
-      return { user, token };
+      let accesstoken = jwt.sign({ email: user.email, id: user._id }, process.env.ACCESS_SECRET_KEY,{ expiresIn: '1m'} );
+      let refreshToken = jwt.sign({ email: user.email, id: user._id }, process.env.REFRESH_SECRET_KEY);
+      tokens[refreshToken] = refreshToken;
+      console.log(tokens)
+      return { user, accesstoken};
     } else {
       throw new Error("Not a Valid Password");
     }
   }
 }
+
 
