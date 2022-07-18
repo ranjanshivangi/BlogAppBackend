@@ -4,7 +4,7 @@ import { newUserValidator } from '../validators/user.validator';
 
 const router = express.Router();
 
-router.post('/register', newUserValidator, userController.newUser);
+router.post('/register', userController.newUser);
 
 router.post('/login', userController.login);
 
