@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
+import User from "../models/user.class";
 
 export const newUser = async (body) => {
   var checkUser = []
+  const { userName, email, password } = body
   const collection = require('../config/database')
-  const cursor = await collection.find({ email: body.email });
+  const cursor = await collection.find({ email: email });
   await cursor.forEach(element => {
     checkUser.push(element)
   });
@@ -13,11 +15,8 @@ export const newUser = async (body) => {
   else {
     const salt = await bcrypt.genSalt(10);
     body.password = await bcrypt.hash(body.password, salt);
-    const data = await collection.insertOne({
-      "userName": body.userName,
-      "email": body.email,
-      "password": body.password
-    })
+    const userData = new User(userName, email, password)
+    const data = await collection.insertOne(userData)
     return data;
   }
 }
