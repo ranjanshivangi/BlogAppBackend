@@ -5,6 +5,20 @@ export const collection = () => {
   return collect
 }
 
+export const getAllBlogs = async () => {
+  var blogs = {}
+  const cursor = await collection().find();
+  await cursor.forEach(element => {
+    blogs = { ...element }
+  });
+  if (blogs === {}) {
+    throw new Error('No blog posted so far')
+  }
+  else {
+      return blogs;
+  }
+};
+
 export const postBlog = async (body, imageName) => {
   const { userId, userName, title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;

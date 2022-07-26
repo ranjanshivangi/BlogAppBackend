@@ -6,7 +6,10 @@ import { upload } from '../multer/multer';
 
 const blogRouter = express.Router();
 
+blogRouter.get('', blogController.getAllBlogs);
+
 blogRouter.post('/post', upload.single('image') ,userAuth ,blogController.postBlog);
+
 
 
 export default blogRouter;
