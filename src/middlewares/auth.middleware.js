@@ -1,3 +1,4 @@
+import { id } from '@hapi/joi/lib/base';
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
@@ -18,7 +19,10 @@ export const userAuth = async (req, res, next) => {
           message: 'User not authenticated'
         };
       } else {
-        req.body['data'] = decodedData;
+        req.body['token'] = decodedData;
+        req.body.userId = decodedData.id;
+        req.body.userName = decodedData.userName;
+       
         next();
       }
     });

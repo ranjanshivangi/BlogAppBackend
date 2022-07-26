@@ -26,6 +26,7 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('combined', { stream: logStream }));
+app.use(express.static('public'));
 
 database();
 
