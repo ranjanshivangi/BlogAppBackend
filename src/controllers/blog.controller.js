@@ -33,3 +33,19 @@ export const postBlog = async (req, res) => {
         });
     }
 };
+
+export const getMyBlogs = async (req, res) => {
+    try {
+        const data = await BlogService.getMyBlogs(req.body.userId);
+        res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        data: data,
+        message: 'My blogs fetched successfully'
+    });
+    }catch (error) {      
+        res.status(HttpStatus.NO_CONTENT).json({
+        code: HttpStatus.NO_CONTENT,
+        message: `${error}`
+    });
+    }
+  };

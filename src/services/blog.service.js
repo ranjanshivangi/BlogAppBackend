@@ -27,3 +27,17 @@ export const postBlog = async (body, imageName) => {
   return data;
 
 }
+
+export const getMyBlogs = async (userID) => {  
+  var blogs = {}
+  const cursor = await collection().find({userId: userID});
+  await cursor.forEach(element => {
+    blogs = { ...element }
+  });
+  if (blogs === {}) {
+    throw new Error('No blog posted so far')
+  }
+  else {
+      return blogs;
+  }
+};

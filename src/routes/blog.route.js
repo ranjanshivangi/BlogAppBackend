@@ -10,6 +10,8 @@ blogRouter.get('', blogController.getAllBlogs);
 
 blogRouter.post('/post', upload.single('image') ,userAuth ,blogController.postBlog);
 
+blogRouter.get('/myblogs',userAuth, blogController.getMyBlogs);
+
 
 
 export default blogRouter;
