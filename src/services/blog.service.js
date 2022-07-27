@@ -74,5 +74,10 @@ export const editBlog = async (blogId, body) => {
   return data;
 }
 
+export const deleteBlog = async (blogId) => {
+  const data = await collection().findOneAndDelete({ _id: blogId })   
+  return data;
+}
+
 
 

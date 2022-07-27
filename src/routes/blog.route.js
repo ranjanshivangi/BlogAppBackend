@@ -14,6 +14,8 @@ blogRouter.get('/myblogs',userAuth, blogController.getMyBlogs);
 
 blogRouter.put('/:_id', upload.single('image') ,userAuth ,blogController.editBlog);
 
+blogRouter.delete('/:_id', userAuth ,blogController.deleteBlog);
+
 
 
 export default blogRouter;

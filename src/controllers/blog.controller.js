@@ -59,12 +59,29 @@ export const editBlog = async (req, res) => {
             data = await BlogService.editBlogWithImage(blogId, req.body, imageName);
         }
         else {
-            data = await BlogService.editBlog(blogId,req.body);
+            data = await BlogService.editBlog(blogId, req.body);
         }
         res.status(HttpStatus.OK).json({
             code: HttpStatus.OK,
             data: data,
             message: 'Blog edited successfully'
+        });
+    } catch (error) {
+        res.status(HttpStatus.CONFLICT).json({
+            code: HttpStatus.CONFLICT,
+            message: `${error}`
+        });
+    }
+};
+
+export const deleteBlog = async (req, res) => {
+    const blogId = req.params._id;
+    try {
+        const data = await BlogService.deleteBlog(blogId);
+        res.status(HttpStatus.OK).json({
+            code: HttpStatus.OK,
+            data: data,
+            message: 'Blog deleted successfully'
         });
     } catch (error) {
         res.status(HttpStatus.CONFLICT).json({
