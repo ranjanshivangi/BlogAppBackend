@@ -12,6 +12,8 @@ blogRouter.post('/post', upload.single('image') ,userAuth ,blogController.postBl
 
 blogRouter.get('/myblogs',userAuth, blogController.getMyBlogs);
 
+blogRouter.put('/:_id', upload.single('image') ,userAuth ,blogController.editBlog);
+
 
 
 export default blogRouter;

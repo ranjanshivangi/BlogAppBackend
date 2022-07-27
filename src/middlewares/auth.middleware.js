@@ -19,7 +19,7 @@ export const userAuth = async (req, res, next) => {
           message: 'User not authenticated'
         };
       } else {
-        req.body['token'] = decodedData;
+        req.body['data'] = decodedData;
         req.body.userId = decodedData.id;
         req.body.userName = decodedData.userName;
        

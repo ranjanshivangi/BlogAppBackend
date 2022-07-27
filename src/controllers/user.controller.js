@@ -19,8 +19,9 @@ export const newUser = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { user, token } = await UserService.login(req.body)
-    res.set('Authorization', 'Bearer ' + token)
+    const { user, accessToken } = await UserService.login(req.body)
+    console.log(accessToken)
+    res.set('Authorization', 'Bearer ' + accessToken)
     res.status(HttpStatus.OK).json({
       data: user,
       message: "Login Successfull"

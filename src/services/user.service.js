@@ -41,11 +41,11 @@ export const login = async (body) => {
   else {
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-      let accesstoken = jwt.sign({ email: user.email, id: user._id, userName: user.userName }, process.env.ACCESS_SECRET_KEY, { expiresIn: '30m' });
+      let accessToken = jwt.sign({ email: user.email, id: user._id, userName: user.userName }, process.env.ACCESS_SECRET_KEY, { expiresIn: '30m' });
       let refreshToken = jwt.sign({ email: user.email, id: user._id }, process.env.REFRESH_SECRET_KEY);
       tokens[refreshToken] = refreshToken;
-      console.log(accesstoken)
-      return { user, accesstoken };
+      console.log(accessToken)
+      return { user, accessToken };
     } else {
       throw new Error("Not a Valid Password");
     }
