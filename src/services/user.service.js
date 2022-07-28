@@ -10,7 +10,7 @@ export const collection = () => {
 
 export const newUser = async (body) => {
   var checkUser = []
-  const { fullName, userName, email, password, bio} = body
+  const { fullName, userName, email, password, bio } = body
 
   const cursor = await collection().find({ email: email });
   await cursor.forEach(element => {
@@ -41,10 +41,7 @@ export const login = async (body) => {
   else {
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-      let accessToken = jwt.sign({ email: user.email, id: user._id, userName: user.userName }, process.env.ACCESS_SECRET_KEY, { expiresIn: '30m' });
-      let refreshToken = jwt.sign({ email: user.email, id: user._id }, process.env.REFRESH_SECRET_KEY);
-      tokens[refreshToken] = refreshToken;
-      console.log(accessToken)
+      let accessToken = jwt.sign({ email: user.email, id: user._id, userName: user.userName }, process.env.ACCESS_SECRET_KEY);
       return { user, accessToken };
     } else {
       throw new Error("Not a Valid Password");
@@ -54,7 +51,7 @@ export const login = async (body) => {
 
 export const updateUser = async (body, userID) => {
 
-  const {userName, bio} = body
+  const { userName, bio } = body
   const data = await collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
     {
       $set: {
@@ -68,5 +65,5 @@ export const updateUser = async (body, userID) => {
     }
   )
   return data;
-  }
+}
 
