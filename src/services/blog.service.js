@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import Blog from "../models/blog.class";
 
 
@@ -41,25 +42,26 @@ export const getMyBlogs = async (userID) => {
 export const editBlogWithImage = async (blogId, body, imageName) => {
   const { title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;
-  const data = await collection().findOneAndUpdate({ _id: blogId },
+  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
     {
       $set: {
-        title: title,
+         title: title,
         description: description,
         category: category,
         image: image,
       },
     },
     {
+      upsert: true,      
       returnNewDocument: true,
     }
-  )
+  ).toArray();
   return data;
 }
 
 export const editBlog = async (blogId, body) => {
   const { title, description, category } = body
-  const data = await collection().findOneAndUpdate({ _id: blogId },
+  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
     {
       $set: {
         title: title,
@@ -75,7 +77,7 @@ export const editBlog = async (blogId, body) => {
 }
 
 export const deleteBlog = async (blogId) => {
-  const data = await collection().findOneAndDelete({ _id: blogId })   
+  const data = await collection().findOneAndDelete({ _id: ObjectId(`${blogId}`) })   
   return data;
 }
 

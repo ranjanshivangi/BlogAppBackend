@@ -10,4 +10,6 @@ userRouter.post('/register', userController.newUser);
 
 userRouter.post('/login', userController.login);
 
+userRouter.put('/update/:_id', userAuth, userController.updateUser);
+
 export default userRouter;

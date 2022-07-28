@@ -33,3 +33,20 @@ export const login = async (req, res) => {
     });
   }
 }
+
+export const updateUser = async (req, res) => {
+  try {
+    const userId = req.params._id;
+    const data = await UserService.updateUser(req.body,userId);
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: data,
+      message: 'User profile updated successfully'
+    });
+  } catch (error) {
+    res.status(HttpStatus.CONFLICT).json({
+      code: HttpStatus.CONFLICT,
+      message: `${error}`
+    });
+  }
+};

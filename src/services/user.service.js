@@ -10,7 +10,7 @@ export const collection = () => {
 
 export const newUser = async (body) => {
   var checkUser = []
-  const { userName, email, password } = body
+  const { fullName, userName, email, password, bio} = body
 
   const cursor = await collection().find({ email: email });
   await cursor.forEach(element => {
@@ -22,7 +22,7 @@ export const newUser = async (body) => {
   else {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
-    const userData = new User(userName, email, hashPassword)
+    const userData = new User(fullName, userName, email, hashPassword, bio)
     const data = await collection().insertOne(userData)
     return data;
   }
@@ -30,7 +30,7 @@ export const newUser = async (body) => {
 
 export const login = async (body) => {
   var user = {}
-  const { userName, email, password } = body
+  const { email, password } = body
   const cursor = await collection().find({ email: email });
   await cursor.forEach(element => {
     user = { ...element }
@@ -52,4 +52,21 @@ export const login = async (body) => {
   }
 }
 
+export const updateUser = async (body, userID) => {
+
+  const {userName, bio} = body
+  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
+    {
+      $set: {
+        userName: userName,
+        bio: bio,
+      },
+    },
+    {
+      upsert: true,
+      returnNewDocument: true,
+    }
+  )
+  return data;
+  }
 
