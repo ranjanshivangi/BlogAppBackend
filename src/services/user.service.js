@@ -21,7 +21,8 @@ export const newUser = async (body) => {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const userData = new User(fullName, userName, email, hashPassword, bio)
-    return collection().insertOne(userData)
+    const data = await collection().insertOne(userData);
+    return data.toArray();
      }
 }
 
@@ -50,7 +51,7 @@ export const login = async (body) => {
 export const updateUser = async (body, userID) => {
 
   const { userName, bio } = body
-  return collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
+  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
     {
       $set: {
         userName: userName,
@@ -61,6 +62,7 @@ export const updateUser = async (body, userID) => {
       upsert: true,
       returnNewDocument: true,
     }
-  ).toArray()  
+  )
+  return data.toArray();  
 }
 
