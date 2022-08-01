@@ -1,15 +1,13 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.class";
 import jwt from "jsonwebtoken";
-const tokens = {}
 
 export const collection = () => {
-  var collect = require('../config/database').userCollection;
-  return collect
+ return require('../config/database').userCollection; 
 }
 
 export const newUser = async (body) => {
-  var checkUser = []
+  let checkUser = []
   const { fullName, userName, email, password, bio } = body
 
   const cursor = await collection().find({ email: email });
@@ -23,13 +21,12 @@ export const newUser = async (body) => {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const userData = new User(fullName, userName, email, hashPassword, bio)
-    const data = await collection().insertOne(userData)
-    return data;
-  }
+    return collection().insertOne(userData)
+     }
 }
 
 export const login = async (body) => {
-  var user = {}
+  let user = {}
   const { email, password } = body
   const cursor = await collection().find({ email: email });
   await cursor.forEach(element => {
@@ -53,7 +50,7 @@ export const login = async (body) => {
 export const updateUser = async (body, userID) => {
 
   const { userName, bio } = body
-  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
+  return collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
     {
       $set: {
         userName: userName,
@@ -64,7 +61,6 @@ export const updateUser = async (body, userID) => {
       upsert: true,
       returnNewDocument: true,
     }
-  )
-  return data;
+  ).toArray()  
 }
 
