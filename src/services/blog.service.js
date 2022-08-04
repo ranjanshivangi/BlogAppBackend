@@ -22,8 +22,7 @@ export const postBlog = async (body, imageName) => {
   const { userId, userName, title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;
   const blogData = new Blog(userId, userName, title, description, image, category)
-  const data = await collection().insertOne(blogData);
-  return data.toArray();
+  return collection().insertOne(blogData);
 }
 
 export const getMyBlogs = async (userID) => {
@@ -41,7 +40,7 @@ export const getMyBlogs = async (userID) => {
 export const editBlogWithImage = async (blogId, body, imageName) => {
   const { title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;
-  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
+  return collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
     {
       $set: {
         title: title,
@@ -55,12 +54,11 @@ export const editBlogWithImage = async (blogId, body, imageName) => {
       returnNewDocument: true,
     }
   )
-  return data.toArray();
 }
 
 export const editBlog = async (blogId, body) => {
   const { title, description, category } = body
-  const data = await collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
+  return collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
     {
       $set: {
         title: title,
@@ -72,7 +70,7 @@ export const editBlog = async (blogId, body) => {
       returnNewDocument: true,
     }
   )
-  return data.toArray();
+  
 }
 
 export const deleteBlog = async (blogId) => {

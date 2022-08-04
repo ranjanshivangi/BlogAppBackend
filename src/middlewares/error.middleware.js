@@ -8,7 +8,7 @@ import logger from '../config/logger';
  * @param {Object} req
  * @param {Object} res
  */
-export function notFound( res) {
+export function notFound(_req, res) {
   res.status(HttpStatus.NOT_FOUND).json({
     code: HttpStatus.NOT_FOUND,
     message: 'Ooops, route not found'
@@ -51,7 +51,7 @@ export function appErrorHandler(err, req, res, next) {
  * @param  {Function} next
  */
 // eslint-disable-next-line no-unused-vars
-export function genericErrorHandler(err, req, res) {
+export function genericErrorHandler(err, req, res, _next) {
   logger.error(`
     status - ${HttpStatus.INTERNAL_SERVER_ERROR} 
     message - ${err.stack} 

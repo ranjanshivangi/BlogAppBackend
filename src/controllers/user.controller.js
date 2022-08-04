@@ -10,6 +10,7 @@ export const newUser = async (req, res) => {
       message: 'User created successfully'
     });
   } catch (error) {
+    console.log("error", error)
     res.status(HttpStatus.CONFLICT).json({
       code: HttpStatus.CONFLICT,
       message: `${error}`
