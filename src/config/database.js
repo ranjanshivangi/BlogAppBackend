@@ -6,10 +6,9 @@ const database = async () => {
         process.env.NODE_ENV === 'test'
             ? process.env.DATABASE_TEST
             : process.env.DATABASE;
-    console.log("------------->", DATABASE)
     const client = await MongoClient.connect(DATABASE, { useNewUrlParser: true, useUnifiedTopology: true });
     logger.info('Connected to the database.');
-
+    
     try {
         const userCollection = client.db(process.env.myDb).collection(process.env.userCollection);
         const blogCollection = client.db(process.env.myDb).collection(process.env.blogCollection);

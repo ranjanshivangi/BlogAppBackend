@@ -3,7 +3,7 @@ import Blog from "../models/blog.class";
 
 
 export const collection = () => {
-  return require('../config/database').blogCollection;  
+  return require('../config/database').blogCollection;
 }
 
 export const getAllBlogs = async () => {
@@ -22,7 +22,7 @@ export const postBlog = async (body, imageName) => {
   const { userId, userName, title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;
   const blogData = new Blog(userId, userName, title, description, image, category)
-  return collection().insertOne(blogData);
+ return collection().insertOne(blogData);
 }
 
 export const getMyBlogs = async (userID) => {
@@ -70,7 +70,7 @@ export const editBlog = async (blogId, body) => {
       returnNewDocument: true,
     }
   )
-  
+
 }
 
 export const deleteBlog = async (blogId) => {

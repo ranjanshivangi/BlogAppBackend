@@ -22,7 +22,7 @@ describe('Test URL', () => {
       request(app)
         .post('/api/v1/users/register')
         .send(userdetails)
-        .end((err, res) => {
+        .end((_err, res) => {
           expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
           done();
         });
@@ -37,7 +37,7 @@ describe('Test URL', () => {
       request(app)
         .post('/api/v1/users/register')
         .send(userdetails)
-        .end((err, res) => {
+        .end((_err, res) => {
           expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
           done();
         });
@@ -54,7 +54,7 @@ describe('Test URL', () => {
       request(app)
         .post('/api/v1/users/login')
         .send(userdetails)
-        .end((err, res) => {
+        .end((_err, res) => {
           authToken = res.body.data;
           expect(res.statusCode).to.be.equal(HttpStatus.OK);
           done();
@@ -70,7 +70,7 @@ describe('Test URL', () => {
       request(app)
         .post('/api/v1/users/login')
         .send(userdetails)
-        .end((err, res) => {
+        .end((_err, res) => {
           expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
           done();
         });
@@ -85,10 +85,10 @@ describe('Test URL', () => {
       request(app)
         .post('/api/v1/users/login')
         .send(userdetails)
-        .end((err, res) => {
+        .end((_err, res) => {
           expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
           done();
         });
     });
+  });  
   });
-});

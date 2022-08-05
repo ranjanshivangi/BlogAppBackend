@@ -18,7 +18,6 @@ export const newUser = async (body) => {
     const hashPassword = await bcrypt.hash(password, salt);
     const userData = new User(fullName, userName, email, hashPassword, bio)
     return collection().insertOne(userData);
-
   }
 }
 
@@ -33,6 +32,7 @@ export const login = async (body) => {
     if (validPassword) {
 
       let accessToken = jwt.sign({ email: data.email, id: data._id, userName: data.userName }, process.env.ACCESS_SECRET_KEY);
+
       return { data, accessToken };
     } else {
       throw new Error("Not a Valid Password");
