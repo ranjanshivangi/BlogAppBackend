@@ -33,7 +33,7 @@ export const getMyBlogs = async (userID) => {
     throw new Error('No blog posted so far')
   }
   else {
-    return blogs;
+    return null;
   }
 };
 
@@ -58,7 +58,7 @@ export const editBlogWithImage = async (blogId, body, imageName) => {
 
 export const editBlog = async (blogId, body) => {
   const { title, description, category } = body
-  return collection().findOneAndUpdate({ _id: ObjectId(`${blogId}`) },
+  return collection().findOneAndUpdate({ _id: blogId },
     {
       $set: {
         title: title,
@@ -74,7 +74,7 @@ export const editBlog = async (blogId, body) => {
 }
 
 export const deleteBlog = async (blogId) => {
-  return collection().findOneAndDelete({ _id: ObjectId(`${blogId}`) })
+  return collection().findOneAndDelete({ _id: blogId})
 }
 
 

@@ -1,10 +1,10 @@
 import multer from "multer";
 
 const storage = multer.diskStorage({
-    destination: function (callback) {
+    destination: function (_req, _file, callback) {
         callback(null, './public/uploads')
     },
-    filename: function (file, callback) {
+    filename: function (_req, file, callback) {
         callback(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
         file.originalname = new Date().toISOString().replace(/:/g, '-') + file.originalname;
     }

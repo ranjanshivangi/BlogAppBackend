@@ -1,5 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import * as BlogService from '../services/blog.service';
+import { validObjectId } from '../utils/user.util';
 
 export const getAllBlogs = async (req, res) => {
     try {
@@ -37,21 +38,29 @@ export const postBlog = async (req, res) => {
 export const getMyBlogs = async (req, res) => {
     try {
         const data = await BlogService.getMyBlogs(req.body.userId);
-        res.status(HttpStatus.OK).json({
-            code: HttpStatus.OK,
-            data: data,
-            message: 'My blogs fetched successfully'
-        });
+        if (data === null) {
+            res.status(HttpStatus.NO_CONTENT).json({
+                code: HttpStatus.NO_CONTENT,
+                message: `${error}`
+            });
+        }
+        else {
+            res.status(HttpStatus.OK).json({
+                code: HttpStatus.OK,
+                data: data,
+                message: 'My blogs fetched successfully'
+            });
+        }
     } catch (error) {
-        res.status(HttpStatus.NO_CONTENT).json({
-            code: HttpStatus.NO_CONTENT,
+        res.status(HttpStatus.CONFLICT).json({
+            code: HttpStatus.CONFLICT,
             message: `${error}`
         });
     }
 };
 
 export const editBlog = async (req, res) => {
-    const blogId = req.params._id;
+    const blogId = validObjectId(req.params._id);
     let data = {}
     try {
         if (req.file != undefined) {
@@ -75,7 +84,7 @@ export const editBlog = async (req, res) => {
 };
 
 export const deleteBlog = async (req, res) => {
-    const blogId = req.params._id;
+    const blogId = validObjectId(req.params._id);
     try {
         const data = await BlogService.deleteBlog(blogId);
         res.status(HttpStatus.OK).json({
