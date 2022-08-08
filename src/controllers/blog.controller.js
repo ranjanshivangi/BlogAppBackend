@@ -60,9 +60,10 @@ export const getMyBlogs = async (req, res) => {
 };
 
 export const editBlog = async (req, res) => {
-    const blogId = validObjectId(req.params._id);
+   
     let data = {}
     try {
+        const blogId = validObjectId(req.params._id);
         if (req.file != undefined) {
             const imageName = req.file.originalname;
             data = await BlogService.editBlogWithImage(blogId, req.body, imageName);
@@ -84,8 +85,9 @@ export const editBlog = async (req, res) => {
 };
 
 export const deleteBlog = async (req, res) => {
-    const blogId = validObjectId(req.params._id);
+    
     try {
+        const blogId = validObjectId(req.params._id);
         const data = await BlogService.deleteBlog(blogId);
         res.status(HttpStatus.OK).json({
             code: HttpStatus.OK,
