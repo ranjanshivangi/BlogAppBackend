@@ -20,7 +20,6 @@ export const newUser = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { user, accessToken } = await UserService.login(req.body)
-    console.log(accessToken)
     res.set('Authorization', 'Bearer ' + accessToken)
     res.status(HttpStatus.OK).json({
       data: user,

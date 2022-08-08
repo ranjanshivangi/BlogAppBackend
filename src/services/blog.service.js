@@ -11,7 +11,7 @@ export const getAllBlogs = async () => {
   const cursor = await collection().find();
   blogs = await cursor.toArray();
   if (blogs === []) {
-    throw new Error('No blog posted so far')
+    return null;
   }
   else {
     return blogs;
@@ -30,10 +30,10 @@ export const getMyBlogs = async (userID) => {
   const cursor = await collection().find({ userId: userID });
   blogs = await cursor.toArray();
   if (blogs === []) {
-    throw new Error('No blog posted so far')
+    return null;
   }
   else {
-    return null;
+    return blogs;
   }
 };
 
