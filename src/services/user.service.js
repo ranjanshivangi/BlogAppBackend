@@ -24,6 +24,7 @@ export const newUser = async (body) => {
 export const login = async (body) => {
   const { email, password } = body
   const data = await collection().findOne({ email: email });
+  console.log(data);
   if (data == null) {
     throw new Error('User does not exist with this email')
   }

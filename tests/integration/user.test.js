@@ -55,7 +55,8 @@ describe('Test URL', () => {
         .post('/api/v1/users/login')
         .send(userdetails)
         .end((_err, res) => {
-          authToken = res.body.data;
+          authToken = res.get('Authorization');
+          console.log(authToken)
           expect(res.statusCode).to.be.equal(HttpStatus.OK);
           done();
         });
