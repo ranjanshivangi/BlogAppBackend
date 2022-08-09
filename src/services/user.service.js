@@ -31,6 +31,7 @@ export const login = async (body) => {
     const validPassword = await bcrypt.compare(password, data.password);
     if (validPassword) {
 
+
       let accessToken = jwt.sign({ email: data.email, id: data._id, userName: data.userName }, process.env.ACCESS_SECRET_KEY);
 
       return { data, accessToken };
