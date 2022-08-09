@@ -1,54 +1,59 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.class";
 import jwt from "jsonwebtoken";
-const tokens = {}
+import { ObjectId } from "mongodb";
 
 export const collection = () => {
-  var collect = require('../config/database');
-  return collect
+  return require('../config/database').userCollection;
 }
 
 export const newUser = async (body) => {
-  var checkUser = []
-  const { userName, email, password } = body
-
-  const cursor = await collection().find({ email: email });
-  await cursor.forEach(element => {
-    checkUser.push(element)
-  });
-  if (checkUser.length != 0) {
+  const { fullName, userName, email, password, bio } = body
+  const data = await collection().findOne({ email: email });
+  if (data != null) {
     throw new Error('User Already Exist')
   }
   else {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
-    const userData = new User(userName, email, hashPassword)
-    const data = await collection().insertOne(userData)
-    return data;
+    const userData = new User(fullName, userName, email, hashPassword, bio)
+    return collection().insertOne(userData);
   }
 }
 
 export const login = async (body) => {
-  var user = {}
-  const { userName, email, password } = body
-  const cursor = await collection().find({ email: email });
-  await cursor.forEach(element => {
-    user = { ...element }
-  });
-  if (user === {}) {
+  const { email, password } = body
+  const data = await collection().findOne({ email: email });
+  if (data == null) {
     throw new Error('User does not exist with this email')
   }
   else {
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, data.password);
     if (validPassword) {
-      let accesstoken = jwt.sign({ email: user.email, userName: user.userName, id: user._id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '1m' });
-      let refreshToken = jwt.sign({ email: user.email, userName: user.userName, id: user._id }, process.env.REFRESH_SECRET_KEY);
-      tokens[refreshToken] = refreshToken;
-      return { user, accesstoken };
+
+
+      let accessToken = jwt.sign({ email: data.email, id: data._id, userName: data.userName }, process.env.ACCESS_SECRET_KEY);
+
+      return { data, accessToken };
     } else {
       throw new Error("Not a Valid Password");
     }
   }
 }
 
+export const updateUser = async (body, userID) => {
+  const { userName, bio } = body
+  return collection().findOneAndUpdate({ _id: ObjectId(`${userID}`) },
+    {
+      $set: {
+        userName: userName,
+        bio: bio,
+      },
+    },
+    {
+      upsert: true,
+      returnNewDocument: true,
+    }
+  )
+}
 

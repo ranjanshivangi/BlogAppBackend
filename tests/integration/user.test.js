@@ -1,41 +1,95 @@
+import database from '../../src/config/database';
 import { expect } from 'chai';
 import request from 'supertest';
-import mongoose from 'mongoose';
-
+import HttpStatus from 'http-status-codes';
 import app from '../../src/index';
 
-describe('User APIs Test', () => {
-  before((done) => {
-    const clearCollections = () => {
-      for (const collection in mongoose.connection.collections) {
-        mongoose.connection.collections[collection].deleteOne(() => {});
-      }
-    };
+let authToken;
 
-    const mongooseConnect = async () => {
-      await mongoose.connect(process.env.DATABASE_TEST);
-      clearCollections();
-    };
-
-    if (mongoose.connection.readyState === 0) {
-      mongooseConnect();
-    } else {
-      clearCollections();
-    }
-
-    done();
+describe('Test URL', () => {
+  before(async () => {
+    await database()
   });
 
-  describe('GET /users', () => {
-    it('should return empty array', (done) => {
+  describe('POST /register', () => {
+    it('given new user when added should return status 201', (done) => {
+      const userdetails = {
+        fullName: "Shivangi Ranjan",
+        userName: "shiviRRRRanjan",
+        email: "shivangiRRRR@gmail.com",
+        password: "shivangiRRR"
+      };
       request(app)
-        .get('/api/v1/users')
-        .end((err, res) => {
-          expect(res.statusCode).to.be.equal(200);
-          expect(res.body.data).to.be.an('array');
-
+        .post('/api/v1/users/register')
+        .send(userdetails)
+        .end((_err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
           done();
         });
     });
+    it('give message user already exist and should return status 409', (done) => {
+      const userdetails = {
+
+        userName: "ugiukgwSRanjan",
+        email: "shivangiRRRR@gmail.com",
+        password: "shivangiDE"
+      };
+      request(app)
+        .post('/api/v1/users/register')
+        .send(userdetails)
+        .end((_err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
+          done();
+        });
+    });
+
   });
-});
+  describe('POST /login', () => {
+
+    it('login registered user when added should return status 200', (done) => {
+      const userdetails = {
+        email: "shivangiRRRR@gmail.com",
+        password: "shivangiRRR"
+      };
+      request(app)
+        .post('/api/v1/users/login')
+        .send(userdetails)
+        .end((_err, res) => {
+          authToken = res.get('Authorization');
+          console.log(authToken)
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          done();
+        });
+
+    });
+
+    it('give message usser doess not exist and return status 409', (done) => {
+      const userdetails = {
+        email: "shiva@gmail.com",
+        password: "shivangiRRR"
+      };
+      request(app)
+        .post('/api/v1/users/login')
+        .send(userdetails)
+        .end((_err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
+          done();
+        });
+
+    });
+
+    it('give message invalid password and return status 409', (done) => {
+      const userdetails = {
+        email: "shivangiRRRR@gmail.com",
+        password: "shiva"
+      };
+      request(app)
+        .post('/api/v1/users/login')
+        .send(userdetails)
+        .end((_err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CONFLICT);
+          done();
+        });
+    });
+  });  
+  });
