@@ -21,11 +21,15 @@ const host = process.env.APP_HOST;
 const port = process.env.APP_PORT;
 const api_version = process.env.API_VERSION;
 
-app.use(cors());
+const corsOption = {
+  exposedHeaders: 'Authorization'
+}
+app.use(cors(corsOption));
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('combined', { stream: logStream }));
+app.use(express.static('public'));
 
 database();
 
