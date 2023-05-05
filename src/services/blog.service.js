@@ -9,9 +9,11 @@ export const collection = () => {
 export const getAllBlogs = async () => {
   let blogs = []
   const cursor = await collection().find();
-  blogs = await cursor.toArray();
+  await cursor.forEach(element => {
+    blogs.push(element)
+  });
   if (blogs === []) {
-    return null;
+    return null
   }
   else {
     return blogs;
@@ -22,15 +24,17 @@ export const postBlog = async (body, imageName) => {
   const { userId, userName, title, description, category } = body
   const image = `${process.env.APP_HOST}:${process.env.APP_PORT}/uploads/${imageName}`;
   const blogData = new Blog(userId, userName, title, description, image, category)
- return collection().insertOne(blogData);
+  return collection().insertOne(blogData);
 }
 
 export const getMyBlogs = async (userID) => {
   let blogs = []
   const cursor = await collection().find({ userId: userID });
-  blogs = await cursor.toArray();
+  await cursor.forEach(element => {
+    blogs.push(element)
+  });
   if (blogs === []) {
-    return null;
+    return null
   }
   else {
     return blogs;
@@ -74,7 +78,7 @@ export const editBlog = async (blogId, body) => {
 }
 
 export const deleteBlog = async (blogId) => {
-  return collection().findOneAndDelete({ _id: blogId})
+  return collection().findOneAndDelete({ _id: blogId })
 }
 
 

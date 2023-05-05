@@ -4,11 +4,11 @@ import { validObjectId } from '../utils/user.util';
 
 export const getAllBlogs = async (req, res) => {
     try {
-        const data = await BlogService.getMyBlogs(req.body.userId);
+        const data = await BlogService.getAllBlogs(req.body.userId);
         if (data === null) {
             res.status(HttpStatus.NO_CONTENT).json({
                 code: HttpStatus.NO_CONTENT,
-                message: `${error}`
+                message: 'No blogs posted'
             });
         }
         else {
@@ -49,7 +49,7 @@ export const getMyBlogs = async (req, res) => {
         if (data === null) {
             res.status(HttpStatus.NO_CONTENT).json({
                 code: HttpStatus.NO_CONTENT,
-                message: `${error}`
+                message: 'No blog posted so far'
             });
         }
         else {
